@@ -6,7 +6,7 @@ export SEN_CHUNK=33 #length of the chunk into which the sentences will be choppe
 
 #Inits the parsing pipeline (exports variable names, modifies path, makes TMPDIR)
 
-export PYTHON=python
+export PYTHON=python2
 THIS=`pwd` #Where am I?
 SCRIPT=`dirname $0` #where is this script?
 cd $SCRIPT
