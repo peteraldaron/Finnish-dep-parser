@@ -30,7 +30,7 @@ class OmorfiWrapper(object):
         if self.process is not None:
             #Try to kill
             self.process.terminate()
-        self.poll=select.poll()
+        self.poll=select.kqueue()
         try:
             self.log.info("Starting hfst-ol.jar")
             self.process = subprocess.Popen(["java","-jar", os.path.join(SCRIPTDIR,"LIBS","hfst-ol.jar"), self.transducer_file], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -48,7 +48,8 @@ class OmorfiWrapper(object):
             self.log.error("Did not succeed in launching 'java -jar LIBS/hfst-ol.jar %s'. The most common reason for this is that you forgot to run './install.sh'. Run it, and also run 'test_dependencies.py' to make sure all is OK.\n\nIf it fails even though you did succeed with ./install.sh, try to run 'java -jar LIBS/hfst-ol.jar model/morphology.finntreebank.hfstol'. It should start and ask for input with 'Ready for input.' Then type in 'koiransa' and see if you get a reasonable analysis. Then either open an issue at https://github.com/TurkuNLP/Finnish-dep-parser/issues  or email ginter@cs.utu.fi and jmnybl@utu.fi and we'll try to help you.\n\nGiving up, because the parser cannot run without morphological lookup."%transducer_file)
             sys.exit(1)
         self.log.info("Started the HFST process.")
-        self.poll.register(self.process.stdout)
+        # stdout = 2 :: self.process.stdout
+        self.poll.fromfd(2)
         
 
 
